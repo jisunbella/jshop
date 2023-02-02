@@ -9,48 +9,46 @@ const defaultFormFields = {
   email: '',
   password: '',
   confirmPassword: ''
-}
+};
 
 const SignUpForm = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
 
-  console.log(formFields);
-
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     // 비밀번호 체크
     if (password !== confirmPassword) {
-      alert("Password do not match!");
+      alert("Password do not match.");
       return;
     }
      
     try {
       const { user } = await createAuthUserWithEmailAndPassword(email, password);
-      
-      await createUserDocumentFromAuth(user, { displayName });
-      alert('Success!')
-      resetFormFields();
 
+      await createUserDocumentFromAuth(user, { displayName });
+      
+      alert('Success!');
+      resetFormFields();
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
-        alert("Cannot create user, email already in use!");
+        alert("Cannot create user, email already in use.");
       } else {
         console.log('user creation encountered an error', error);
       }
     }
-  }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
 
     setFormFields({ ...formFields, [name]: value });
-  }
+  };
 
   return (
     <div className='sign-up-container'>
